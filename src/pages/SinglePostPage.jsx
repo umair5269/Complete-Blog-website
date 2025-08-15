@@ -92,24 +92,40 @@ function SinglePostPage() {
     return String(currentUser._id ?? currentUser.id ?? '');
   };
 
-  const canModify = (() => {
-  if (!post || !currentUser) return false;
+  //   const canModify = (() => {
+  //   if (!post || !currentUser) return false;
 
-  const authorRole = post?.author?.role; // Assuming your post object has the populated user role
+  //   const authorRole = post?.author?.role; 
+  //   const authorId = getAuthorId();
+  //   const userId = getCurrentUserId();
+
+  //   // Admin can always modify
+  //   if (currentUser.role === 'admin') return true;
+
+  //   // Manager can modify only if the post is NOT by admin
+  //   if (currentUser.role === 'manager' && authorRole !== 'admin') {
+  //     return true;
+  //   }
+
+  //   // Regular users can modify their own posts
+  //   return authorId && userId && authorId === userId;
+  // })();
+
+  // permissions
+  const authorRole = post?.author?.role;
   const authorId = getAuthorId();
   const userId = getCurrentUserId();
 
-  // Admin can always modify
-  if (currentUser.role === 'admin') return true;
+  // EDIT: admin, author, manager (but manager can't edit admin's posts)
+  const canEdit =
+    currentUser?.role === 'admin' ||
+    (currentUser?.role === 'manager' && authorRole !== 'admin') ||
+    (authorId && userId && authorId === userId);
 
-  // Manager can modify only if the post is NOT by admin
-  if (currentUser.role === 'manager' && authorRole !== 'admin') {
-    return true;
-  }
-
-  // Regular users can modify their own posts
-  return authorId && userId && authorId === userId;
-})();
+  // DELETE: only admin and author
+  const canDelete =
+    currentUser?.role === 'admin' ||
+    (authorId && userId && authorId === userId);
 
 
   // DEBUG - remove after verifying
@@ -121,10 +137,11 @@ function SinglePostPage() {
         currentUser,
         postAuthor: post?.author,
         postAuthorId: getAuthorId(),
-        canModify,
+        canEdit,
+        canDelete,
       });
     }
-  }, [loading, currentUser, post, canModify]);
+  }, [loading, currentUser, post, canEdit, canDelete]);
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
@@ -179,23 +196,23 @@ function SinglePostPage() {
             </div>
 
             <div className="mt-6 flex items-center gap-3">
-              {canModify && (
-                <>
-                  <button
-                    onClick={handleEdit}
-                    className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow"
-                  >
-                    ✏ Edit
-                  </button>
+              {canEdit && (
+                <button
+                  onClick={handleEdit}
+                  className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow"
+                >
+                  ✏ Edit
+                </button>
+              )}
 
-                  <button
-                    onClick={handleDelete}
-                    className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow"
-                  >
-                    🗑 Delete
-                  </button>
-                </>
-              ) }
+              {canDelete && (
+                <button
+                  onClick={handleDelete}
+                  className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow"
+                >
+                  🗑 Delete
+                </button>
+              )}
 
               <button
                 onClick={() => navigate(-1)}
