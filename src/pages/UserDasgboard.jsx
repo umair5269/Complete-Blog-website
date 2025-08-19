@@ -9,20 +9,21 @@ export default function UserDashboard() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
+  
       try {
         const res = await fetch('http://localhost:5000/api/auth/profile', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: 'GET',
+          credentials: 'include',
         });
 
+        if (res.status === 401) {
+          // not logged in, redirect
+          navigate('/login');
+          return;
+        }
+
         const data = await res.json();
+        console.log('Profile data:', data);
 
         if (!res.ok) {
           setError(data.message || 'Failed to load profile');

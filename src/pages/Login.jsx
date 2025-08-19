@@ -20,6 +20,7 @@ const Login = () => {
     try {
       const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },
@@ -31,8 +32,6 @@ const Login = () => {
       if (!res.ok) {
         setError(data.message || 'login failed');
       } else {
-        localStorage.setItem('token', data.token);
-         localStorage.setItem('role', data.role);
         navigate('/');
       }
     } catch (err) {

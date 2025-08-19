@@ -7,36 +7,25 @@ const authRoutes = require('./routes/auth');
 const postRoutes=require ('./routes/postRoutes')
 const adminRoutes = require('./routes/admin');
 const managerRoutes = require('./routes/manager');
-const helmet =require('helmet');
-const sanitizeHtml= require('sanitize-html');
+const cookieParser = require("cookie-parser");
 
 const app = express();
+app.use(cookieParser());
 
-app.use(helmet());
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173", // ✅ your frontend URL
+  credentials: true,               // ✅ allow cookies to be sent
+}));
 app.use(express.json());
+
+// routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/manager', managerRoutes);
 
-// basic test route
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
-
-// Optional: sanitize HTML input on specific routes
-app.post('/comments', (req, res) => {
-  const cleanComment = sanitizeHtml(req.body.comment, {
-    allowedTags: ['b', 'i', 'em', 'strong', 'a'],
-    allowedAttributes: { 'a': ['href'] }
-  });
-
-  // save cleanComment to DB...
-  res.json({ message: 'Comment saved!', comment: cleanComment });
-});
 
 // connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {

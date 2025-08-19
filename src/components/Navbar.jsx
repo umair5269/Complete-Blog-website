@@ -1,18 +1,62 @@
-import { Button } from '@/components/ui/button';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
-  const role = localStorage.getItem('role');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const isLoggedIn = !!user; // true if user object exists
 
+  console.log('User role:', user?.role);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/me", {
+          method: "GET",
+          credentials: "include", // ✅ important for cookies
+        });
+
+        if (!res.ok) {
+          throw new Error("Not authenticated");
+        }
+
+        const data = await res.json();
+        console.log("User data:", data);
+        setUser(data); // adjust based on your backend response
+      } catch (err) {
+        setUser(null); // not logged in
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include", // 👈 clears cookie
+      });
+      setUser(null);
+      navigate("/login");
+      window.location.reload(); // refresh navbar state
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
+
+  console.log('isloggedIn:', isLoggedIn);
+
+  if (loading) {
+    return (
+      <nav className="bg-gray-800 p-4">
+        <p className="text-gray-300">Checking login...</p>
+      </nav>
+    );
   }
 
 
@@ -26,11 +70,11 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {role === 'admin' && isLoggedIn &&
+                {user?.role === 'admin' && isLoggedIn &&
 
                   <Link to="/admin" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Admin Dashboard</Link>
                 }
-                {role === 'manager' && isLoggedIn &&
+                {user?.role === 'manager' && isLoggedIn &&
 
                   <Link to="/manager" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Manager Dashboard</Link>
                 }
@@ -42,7 +86,7 @@ const Navbar = () => {
                     <Link to="/createposts" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Create posts</Link>
                   </>
 
-                  )
+                )
                 }
               </div>
             </div>

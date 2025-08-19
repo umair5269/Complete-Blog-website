@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminRoute({ children }) {
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -16,12 +16,25 @@ export default function AdminRoute({ children }) {
 
       try {
         const res = await fetch('http://localhost:5000/api/auth/admin-data', {
-          headers: { 'Authorization': `Bearer ${token}` }
+          method: 'GET',
+          credentials: 'include',
         });
 
-        if (res.status === 403) {
-          navigate('/');
+        if (res.status === 401) {
+          navigate('/login');
           return;
+        }
+
+        if (res.status === 403) {
+          navigate('/'); // not admin
+          return;
+        }
+
+        const data = await res.json();
+        if (data?.role === 'admin') {
+          setIsAdmin(true);
+        } else {
+          navigate('/');
         }
 
         setLoading(false); 
@@ -38,5 +51,5 @@ export default function AdminRoute({ children }) {
     return <p>Loading...</p>;
   }
 
-  return children;
+  return isAdmin ? children : null;
 }

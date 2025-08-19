@@ -17,6 +17,7 @@ import ManagerRoute from '@/routes/ManagerRoute'
 import Manager from './pages/Manager'
 import ManagerUsersPage from './pages/ManagerUsersPage'
 import ManagerPostsPage from './pages/MnagerPostsPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
 
@@ -38,15 +39,65 @@ function App() {
         <Manager />
       </ManagerRoute>
       } />
-    <Route path="/userdashboard" element={<UserDashboard />} />
-    <Route path="/createposts" element={<CreatePostPage />} />
-    <Route path="/showposts" element={<ShowPosts />} />
-    <Route path="/post/:id" element={<SinglePostPage />} />
-    <Route path="/edit-post/:id" element={<EditPostPage />} />
-    <Route path='/admin/users' element={<AdminUsersPage />} />
-    <Route path='/manager/users' element={<ManagerUsersPage />} />
-    <Route path='/admin/posts' element={<AdminPostsPage />} />
-    <Route path='/manager/posts' element={<ManagerPostsPage />} />
+    <Route
+
+     path="/userdashboard" element={
+      <ProtectedRoute>
+        <UserDashboard />
+      </ProtectedRoute>
+      } />
+
+    <Route
+     path="/createposts" element={
+      <ProtectedRoute>
+        <CreatePostPage />
+      </ProtectedRoute>
+     } />
+
+    <Route path="/showposts"
+     element={
+      <ProtectedRoute>
+        <ShowPosts />
+      </ProtectedRoute>
+     } />
+
+
+    <Route
+    path="/post/:id" element={
+      <ProtectedRoute>
+        <SinglePostPage />
+      </ProtectedRoute>
+    } />
+    <Route
+     path="/edit-post/:id" element={
+      <ProtectedRoute>
+        <EditPostPage />
+      </ProtectedRoute>
+     } />
+    <Route
+     path='/admin/users' element={
+      <AdminRoute>
+     <AdminUsersPage />
+      </AdminRoute>
+     } />
+    <Route
+     path='/manager/users' element={
+      <ManagerRoute>
+      <ManagerUsersPage />
+      </ManagerRoute>
+      } />
+    <Route
+     path='/admin/posts' element={
+      <AdminRoute>
+     <AdminPostsPage />
+      </AdminRoute>
+     } />
+    <Route
+     path='/manager/posts' element={
+      <ManagerRoute>
+     <ManagerPostsPage />
+      </ManagerRoute>
+     } />
 
    </Routes>
    </BrowserRouter>

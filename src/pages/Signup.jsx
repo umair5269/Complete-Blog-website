@@ -20,6 +20,7 @@ const Signup = () => {
     try {
       const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
+        credentials: "include",
         headers: {
           'Content-Type': 'application/json',
         },
@@ -32,7 +33,7 @@ const Signup = () => {
         setError(data.message || 'Signup failed');
       } else {
         localStorage.setItem('token', data.token);
-         localStorage.setItem('role', data.role);
+        localStorage.setItem('role', data.role);
         navigate('/');
       }
     } catch (err) {
@@ -73,8 +74,8 @@ const Signup = () => {
               </div>
             </div>
             <div>
-              
-             
+
+
             </div>
 
             <div>
