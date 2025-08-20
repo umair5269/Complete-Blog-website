@@ -29,18 +29,18 @@ const protect = async (req, res, next) => {
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     console.log('Admin access granted');
-    next();
+    return  next();
   } else {
-    res.status(403).json({ message: 'Admin access required' });
+    return  res.status(403).json({ message: 'Admin access required' });
   }
 };
 
 const managerOnly = (req, res, next) => {
   if (req.user && req.user.role === 'manager') {
     console.log('Manager access granted');
-    next();
+    return  next();
   } else {
-    res.status(403).json({ message: 'Manager access required' });
+   return  res.status(403).json({ message: 'Manager access required' });
   }
 };
 

@@ -5,7 +5,6 @@ import Navbar from '../components/Navbar';
 export default function EditPostPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -17,9 +16,8 @@ export default function EditPostPage() {
     const fetchPost = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+         method: 'GET',
+        credentials: 'include',
         });
         if (!res.ok) throw new Error('Failed to load post');
         const data = await res.json();
@@ -34,7 +32,7 @@ export default function EditPostPage() {
       }
     };
     fetchPost();
-  }, [id, token]);
+  }, [id]);
 
   // Save changes
   const handleUpdate = async (e) => {
@@ -42,9 +40,9 @@ export default function EditPostPage() {
     try {
       const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
         method: 'PUT',
+         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ title, content, status }),
       });

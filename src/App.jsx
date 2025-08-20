@@ -18,90 +18,94 @@ import Manager from './pages/Manager'
 import ManagerUsersPage from './pages/ManagerUsersPage'
 import ManagerPostsPage from './pages/MnagerPostsPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from '@/context/AuthContext'
 
 function App() {
 
   return (
-   <>
-   <BrowserRouter>
-   <Routes>
-    <Route path="/" element={<Homepage />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/signup" element={<Signup />} />
+    <>
+      <BrowserRouter>
+        <AuthProvider>
 
-    <Route path="/admin" element={
-      <AdminRoute>
-        <Admin />
-      </AdminRoute>
-      } />
-    <Route path="/manager" element={
-      <ManagerRoute>
-        <Manager />
-      </ManagerRoute>
-      } />
-    <Route
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-     path="/userdashboard" element={
-      <ProtectedRoute>
-        <UserDashboard />
-      </ProtectedRoute>
-      } />
+            <Route path="/admin" element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            } />
+            <Route path="/manager" element={
+              <ManagerRoute>
+                <Manager />
+              </ManagerRoute>
+            } />
+            <Route
 
-    <Route
-     path="/createposts" element={
-      <ProtectedRoute>
-        <CreatePostPage />
-      </ProtectedRoute>
-     } />
+              path="/userdashboard" element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } />
 
-    <Route path="/showposts"
-     element={
-      <ProtectedRoute>
-        <ShowPosts />
-      </ProtectedRoute>
-     } />
+            <Route
+              path="/createposts" element={
+                <ProtectedRoute>
+                  <CreatePostPage />
+                </ProtectedRoute>
+              } />
+
+            <Route path="/showposts"
+              element={
+                <ProtectedRoute>
+                  <ShowPosts />
+                </ProtectedRoute>
+              } />
 
 
-    <Route
-    path="/post/:id" element={
-      <ProtectedRoute>
-        <SinglePostPage />
-      </ProtectedRoute>
-    } />
-    <Route
-     path="/edit-post/:id" element={
-      <ProtectedRoute>
-        <EditPostPage />
-      </ProtectedRoute>
-     } />
-    <Route
-     path='/admin/users' element={
-      <AdminRoute>
-     <AdminUsersPage />
-      </AdminRoute>
-     } />
-    <Route
-     path='/manager/users' element={
-      <ManagerRoute>
-      <ManagerUsersPage />
-      </ManagerRoute>
-      } />
-    <Route
-     path='/admin/posts' element={
-      <AdminRoute>
-     <AdminPostsPage />
-      </AdminRoute>
-     } />
-    <Route
-     path='/manager/posts' element={
-      <ManagerRoute>
-     <ManagerPostsPage />
-      </ManagerRoute>
-     } />
+            <Route
+              path="/post/:id" element={
+                <ProtectedRoute>
+                  <SinglePostPage />
+                </ProtectedRoute>
+              } />
+            <Route
+              path="/edit-post/:id" element={
+                <ProtectedRoute>
+                  <EditPostPage />
+                </ProtectedRoute>
+              } />
+            <Route
+              path='/admin/users' element={
+                <AdminRoute>
+                  <AdminUsersPage />
+                </AdminRoute>
+              } />
+            <Route
+              path='/manager/users' element={
+                <ManagerRoute>
+                  <ManagerUsersPage />
+                </ManagerRoute>
+              } />
+            <Route
+              path='/admin/posts' element={
+                <AdminRoute>
+                  <AdminPostsPage />
+                </AdminRoute>
+              } />
+            <Route
+              path='/manager/posts' element={
+                <ManagerRoute>
+                  <ManagerPostsPage />
+                </ManagerRoute>
+              } />
 
-   </Routes>
-   </BrowserRouter>
-   </>
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </>
   )
 }
 

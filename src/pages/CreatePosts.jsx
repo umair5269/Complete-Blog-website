@@ -10,8 +10,6 @@ function CreatePostPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token= localStorage.getItem('token')
-
     const postData = {
       title,
       content,
@@ -23,9 +21,9 @@ function CreatePostPage() {
       // Example: send to API (adjust URL as needed)
       const res = await fetch('http://localhost:5000/api/posts/create', {
         method: 'POST',
+        credentials: 'include',
         headers: {
              'Content-Type': 'application/json',
-             'Authorization': `Bearer ${token}`
             },
         body: JSON.stringify(postData),
       });

@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import { AuthContext } from '@/context/AuthContext';
+ 
 function MyPostsPage() {
+  const { user } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null); // 'admin' or 'user'
   const navigate = useNavigate();
+  // const isOwner= (post) => post.author._id === user?._id;
+
+  const userRole =user?.role
+  const userId =user?.id
 
   useEffect(() => {
     const fetchMyPosts = async () => {
-      const token = localStorage.getItem('token');
-      const role = localStorage.getItem('role'); // Save role when logging in
-      setUserRole(role);
-
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
       try {
         const res = await fetch('http://localhost:5000/api/posts/my-posts', {
+          method: "GET",
+          credentials: "include",
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json',
           }
         });
 
@@ -42,16 +40,15 @@ function MyPostsPage() {
     fetchMyPosts();
   }, [navigate]);
 
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
-
-    const token = localStorage.getItem('token');
-
     try {
       const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
         method: 'DELETE',
+        credentials: "include",
         headers: {
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json"
         }
       });
 
@@ -103,7 +100,7 @@ function MyPostsPage() {
                   </div>
 
                   <div className="mt-4 flex gap-2">
-                    {(userRole === 'admin' || post.isOwner) && (
+                    {(userRole === 'admin' || userId === post.author) && (
                       <>
                         <button
                           onClick={() => handleEdit(post._id)}

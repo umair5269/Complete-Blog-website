@@ -4,29 +4,9 @@ import Navbar from '../components/Navbar';
 import { Users, FileText } from 'lucide-react'; // Icons
 
 const Manager = () => {
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const managerData = async () => {
-      const res = await fetch('http://localhost:5000/api/auth/manager-data', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (res.status === 403) {
-        alert('Access denied');
-        navigate('/');
-      } else {
-        const data = await res.json();
-        console.log(data);
-      }
-    };
-
-    managerData();
-  }, [token, navigate]);
-
+  
   return (
     <>
       <Navbar />

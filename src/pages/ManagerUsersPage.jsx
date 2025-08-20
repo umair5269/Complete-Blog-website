@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
 
 export default function ManagerUsersPage() {
   const [users, setUsers] = useState([]);
@@ -13,10 +13,10 @@ export default function ManagerUsersPage() {
     const fetchUsers = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/manager/users', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          method: "GET",
+          credentials: "include",
         });
+
         if (res.status === 403) {
           alert('Access denied');
           navigate('/');
@@ -31,7 +31,7 @@ export default function ManagerUsersPage() {
     };
 
     fetchUsers();
-  }, [token, navigate]);
+  }, [navigate]);
 
   if (loading) return <p className="text-center mt-10">Loading users...</p>;
 

@@ -5,14 +5,14 @@ import { Link, useNavigate } from 'react-router-dom';
 const ManagerPostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/manager/posts', {
-          headers: { Authorization: `Bearer ${token}` },
+          method: 'GET',
+          credentials: "include",
         });
         const data = await res.json();
         setPosts(data);
@@ -22,24 +22,7 @@ const ManagerPostsPage = () => {
       setLoading(false);
     };
     fetchPosts();
-  }, [token]);
-
-  // const handleDelete = async (id) => {
-  //   if (!window.confirm('Are you sure you want to delete this post?')) return;
-  //   try {
-  //     const res = await fetch(`http://localhost:5000/api/manager/posts/${id}`, {
-  //       method: 'DELETE',
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     if (res.ok) {
-  //       setPosts(posts.filter((post) => post._id !== id));
-  //     } else {
-  //       alert('Failed to delete post');
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  }, []);
 
   if (loading) return <p className="text-center mt-10">Loading posts...</p>;
 

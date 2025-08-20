@@ -1,55 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '@/context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const isLoggedIn = !!user; // true if user object exists
+  const { user, loading } = useContext(AuthContext);
+  const isLoggedIn = !!user;
 
-  console.log('User role:', user?.role);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
-          method: "GET",
-          credentials: "include", // ✅ important for cookies
-        });
-
-        if (!res.ok) {
-          throw new Error("Not authenticated");
-        }
-
-        const data = await res.json();
-        console.log("User data:", data);
-        setUser(data); // adjust based on your backend response
-      } catch (err) {
-        setUser(null); // not logged in
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleLogout = async () => {
     try {
       await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
-        credentials: "include", // 👈 clears cookie
+        credentials: "include",
+        headers:{
+          "Content-Type": "application/json"
+        } 
       });
-      setUser(null);
+      alert("logged out successfully");
       navigate("/login");
-      window.location.reload(); // refresh navbar state
+      
     } catch (err) {
       console.error("Logout failed", err);
     }
   };
 
-  console.log('isloggedIn:', isLoggedIn);
 
   if (loading) {
     return (

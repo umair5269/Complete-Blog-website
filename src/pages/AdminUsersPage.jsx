@@ -6,16 +6,14 @@ import { useNavigate } from 'react-router-dom';
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/admin/users', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          method: 'GET',
+          credentials: 'include',
         });
         if (res.status === 403) {
           alert('Access denied');
@@ -31,17 +29,22 @@ export default function AdminUsersPage() {
     };
 
     fetchUsers();
-  }, [token, navigate]);
+  }, [navigate]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        credentials: 'include',
       });
+
+      if (res.status === 401) {
+        alert("Session expired. Please log in again.");
+        navigate("/login");
+        return;
+      }
+
       if (res.ok) {
         setUsers(users.filter(user => user._id !== id));
         alert('User deleted successfully');
@@ -59,13 +62,19 @@ export default function AdminUsersPage() {
     try {
       const res = await fetch(`http://localhost:5000/api/admin/users/${id}/role`, {
         method: 'PATCH',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ role: newRole })
       });
-      const data = await res.json(); 
+      const data = await res.json();
+
+      if (res.status === 401) {
+        alert("Session expired. Please log in again.");
+        navigate("/login");
+        return;
+      }
 
       if (res.ok) {
         setUsers(users.map(user =>

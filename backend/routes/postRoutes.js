@@ -60,7 +60,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
+ 
 
 // Update post
 router.put('/:id', protect, async (req, res) => {

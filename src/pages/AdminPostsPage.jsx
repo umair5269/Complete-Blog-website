@@ -5,14 +5,14 @@ import { Link, useNavigate } from 'react-router-dom';
 const AdminPostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/admin/posts', {
-          headers: { Authorization: `Bearer ${token}` },
+          method: 'GET',
+          credentials: 'include',
         });
         const data = await res.json();
         setPosts(data);
@@ -22,14 +22,17 @@ const AdminPostsPage = () => {
       setLoading(false);
     };
     fetchPosts();
-  }, [token]);
+  }, [navigate]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
       const res = await fetch(`http://localhost:5000/api/admin/posts/${id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       if (res.ok) {
         setPosts(posts.filter((post) => post._id !== id));

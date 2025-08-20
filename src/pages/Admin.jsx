@@ -4,28 +4,36 @@ import Navbar from '../components/Navbar';
 import { Users, FileText } from 'lucide-react'; // Icons
 
 const Admin = () => {
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const adminData = async () => {
-      const res = await fetch('http://localhost:5000/api/auth/admin-data', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+   useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/admin-data", {
+          method: "GET",
+          credentials: "include",
+        });
 
-      if (res.status === 403) {
-        alert('Access denied');
-        navigate('/');
-      } else {
+        if (res.status === 403) {
+          alert("Access denied");
+          navigate("/");
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch admin data");
+        }
+
         const data = await res.json();
-        console.log(data);
+        console.log("Admin data:", data);
+      } catch (err) {
+        console.error("Error fetching admin data:", err);
+        navigate("/login"); // redirect if not authorized
       }
     };
 
-    adminData();
-  }, [token, navigate]);
+    fetchAdminData();
+  }, [navigate]);
 
   return (
     <>

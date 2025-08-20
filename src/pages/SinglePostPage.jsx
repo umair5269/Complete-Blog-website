@@ -1,58 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { AuthContext } from '@/context/AuthContext';
 
 function SinglePostPage() {
+   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  // decode JWT payload (safe fallback)
-  const decodeToken = (token) => {
-    try {
-      const payload = token.split('.')[1];
-      // atob might need padding, but usually works in browsers
-      return JSON.parse(window.atob(payload));
-    } catch (err) {
-      return null;
-    }
-  };
-
-  // load current user (from localStorage or token)
-  useEffect(() => {
-    const rawUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-
-    if (rawUser) {
-      try {
-        const u = JSON.parse(rawUser);
-        setCurrentUser({
-          _id: u._id || u.id || u.userId || null,
-          role: u.role || null,
-          name: u.name || u.username || ''
-        });
-        return;
-      } catch (err) {
-        console.warn('Could not parse localStorage.user', err);
-      }
-    }
-
-    if (token) {
-      const payload = decodeToken(token);
-      if (payload) {
-        setCurrentUser({
-          _id: payload.id || payload._id || null,
-          role: payload.role || null,
-          name: payload.name || ''
-        });
-        return;
-      }
-    }
-
-    setCurrentUser(null);
-  }, []);
 
   // fetch the post
   useEffect(() => {
@@ -78,6 +34,7 @@ function SinglePostPage() {
     fetchPost();
   }, [id]);
 
+
   // helper to return author id no matter the shape
   const getAuthorId = () => {
     if (!post) return null;
@@ -87,76 +44,42 @@ function SinglePostPage() {
   };
 
   // normalized current user id
-  const getCurrentUserId = () => {
-    if (!currentUser) return null;
-    return String(currentUser._id ?? currentUser.id ?? '');
+  const getuserId = () => {
+    if (!user) return null;
+    return String(user._id ?? user.id ?? '');
   };
 
-  //   const canModify = (() => {
-  //   if (!post || !currentUser) return false;
-
-  //   const authorRole = post?.author?.role; 
-  //   const authorId = getAuthorId();
-  //   const userId = getCurrentUserId();
-
-  //   // Admin can always modify
-  //   if (currentUser.role === 'admin') return true;
-
-  //   // Manager can modify only if the post is NOT by admin
-  //   if (currentUser.role === 'manager' && authorRole !== 'admin') {
-  //     return true;
-  //   }
-
-  //   // Regular users can modify their own posts
-  //   return authorId && userId && authorId === userId;
-  // })();
 
   // permissions
   const authorRole = post?.author?.role;
   const authorId = getAuthorId();
-  const userId = getCurrentUserId();
+  const userId = getuserId();
 
   // EDIT: admin, author, manager (but manager can't edit admin's posts)
   const canEdit =
-    currentUser?.role === 'admin' ||
-    (currentUser?.role === 'manager' && authorRole !== 'admin') ||
-    (authorId && userId && authorId === userId);
+    user?.role === 'admin' ||
+    (user?.role === 'manager' && authorRole !== 'admin') ||
+    (authorId === userId);
 
   // DELETE: only admin and author
   const canDelete =
-    currentUser?.role === 'admin' ||
-    (authorId && userId && authorId === userId);
+    user?.role === 'admin' ||
+    (authorId === userId);
 
-
-  // DEBUG - remove after verifying
-  useEffect(() => {
-    if (!loading) {
-      // helpful logs if buttons still don't show
-      // eslint-disable-next-line no-console
-      console.log('SinglePostPage debug:', {
-        currentUser,
-        postAuthor: post?.author,
-        postAuthorId: getAuthorId(),
-        canEdit,
-        canDelete,
-      });
-    }
-  }, [loading, currentUser, post, canEdit, canDelete]);
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
         method: 'DELETE',
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
       if (res.ok) {
         alert('Post deleted');
-        navigate('/');
+        navigate(-1);
       } else {
         const text = await res.text();
         console.error('Delete failed:', res.status, text);

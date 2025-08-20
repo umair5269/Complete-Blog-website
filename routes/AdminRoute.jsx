@@ -9,10 +9,6 @@ export default function AdminRoute({ children }) {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      if (!token) {
-        navigate('/login');
-        return;
-      }
 
       try {
         const res = await fetch('http://localhost:5000/api/auth/admin-data', {
@@ -45,11 +41,11 @@ export default function AdminRoute({ children }) {
     };
 
     checkAdmin();
-  }, [token, navigate]);
+  }, [navigate]);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  return isAdmin ? children : null;
+  return isAdmin ? children : navigate('/');
 }

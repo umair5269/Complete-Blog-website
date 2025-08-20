@@ -95,20 +95,12 @@ function generateToken(id, role) {
     });
 }
 
-router.get('/profile', protect, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId).select('-password');
-        res.json(user);
-    } catch (err) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
 
 router.get('/admin-data', protect, adminOnly, (req, res) => {
     res.json({ message: 'Welcome Admin!', role: req.user.role });
 });
 router.get('/manager-data', protect, managerOnly, (req, res) => {
-    res.json({ message: 'Welcome manager!' });
+    res.json({ message: 'Welcome manager!', role: req.user.role });
 });
 
 router.get("/me", protect, async (req, res) => {
