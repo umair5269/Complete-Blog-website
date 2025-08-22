@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '@/context/AuthContext';
+import DOMPurify from 'dompurify';
 
 export default function UserDashboard() {
   const { user } = useContext(AuthContext);
@@ -30,15 +31,15 @@ export default function UserDashboard() {
             <div className="space-y-4">
               <div className="flex justify-between border-b pb-2">
                 <span className="text-gray-500 font-medium">Name:</span>
-                <span className="text-gray-800">{user.name}</span>
+                <span className="text-gray-800">{DOMPurify.sanitize(user.name)}</span>
               </div>
               <div className="flex justify-between border-b pb-2">
                 <span className="text-gray-500 font-medium">Email:</span>
-                <span className="text-gray-800">{user.email}</span>
+                <span className="text-gray-800">{DOMPurify.sanitize(user.email)}</span>
               </div>
               <div className="flex justify-between border-b pb-2">
                 <span className="text-gray-500 font-medium">Role:</span>
-                <span className="capitalize text-gray-800">{user.role}</span>
+                <span className="capitalize text-gray-800">{DOMPurify.sanitize(user.role)}</span>
               </div>
             </div>
           </div>

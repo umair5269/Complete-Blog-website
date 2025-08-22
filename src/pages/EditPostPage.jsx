@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import DOMPurify from 'dompurify';
+
+
 
 export default function EditPostPage() {
   const { id } = useParams();
@@ -16,8 +19,8 @@ export default function EditPostPage() {
     const fetchPost = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
-         method: 'GET',
-        credentials: 'include',
+          method: 'GET',
+          credentials: 'include',
         });
         if (!res.ok) throw new Error('Failed to load post');
         const data = await res.json();
@@ -37,14 +40,17 @@ export default function EditPostPage() {
   // Save changes
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    const cleanTitle = DOMPurify.sanitize(title);
+    const cleanContent = DOMPurify.sanitize(content);
     try {
       const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
         method: 'PUT',
-         credentials: 'include',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, content, status }),
+        body: JSON.stringify({ title: cleanTitle, content: cleanContent, status }),
       });
 
       if (res.ok) {
@@ -128,7 +134,7 @@ export default function EditPostPage() {
               </button>
               <button
                 type="submit"
-                
+
                 className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
               >
                 Save Changes

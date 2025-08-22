@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 
 export default function ManagerUsersPage() {
@@ -60,8 +61,8 @@ export default function ManagerUsersPage() {
               {users.map((user) => (
                 <tr key={user._id}>
                 
-                  <td className="px-6 py-4">{user.name}</td>
-                  <td className="px-6 py-4">{user.email}</td>
+                  <td className="px-6 py-4">{DOMPurify.sanitize(user.name)}</td>
+                  <td className="px-6 py-4">{DOMPurify.sanitize(user.email)}</td>
                   <td className="px-6 py-4 capitalize">{user.role}</td>
                   <td className="px-6 py-4 text-right">
                     

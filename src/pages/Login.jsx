@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext  } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
+import { AuthContext } from "@/context/AuthContext";
+
 
 const Login = () => {
-
-  const [form, setForm] = useState({ name: '', email: '' });
+ const { setUser } = useContext(AuthContext);
+  const [form, setForm] = useState({ password: '', email: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ const Login = () => {
       if (!res.ok) {
         setError(data.message || 'login failed');
       } else {
+        setUser(data);
         navigate('/');
       }
     } catch (err) {
@@ -62,7 +65,7 @@ const Login = () => {
                 <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">Password</label>
               </div>
               <div className="mt-2">
-                <input onChange={handleChange} value={form.password} type="password" name="password" id="password" autocomplete="current-password" required className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                <input onChange={handleChange} value={form.password} type="password" name="password" id="password" autoComplete="current-password" required className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
               </div>
             </div>
 

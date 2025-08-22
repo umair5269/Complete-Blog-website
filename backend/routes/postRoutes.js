@@ -3,6 +3,7 @@ const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const Post = require('../models/Posts');
 
+
 // Create post
 router.post('/create', protect, async (req, res) => {
   const { title, content, status } = req.body;

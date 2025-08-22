@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 const ManagerPostsPage = () => {
   const [posts, setPosts] = useState([]);
@@ -34,12 +35,12 @@ const ManagerPostsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <div key={post._id} className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-2"><Link to={`/post/${post._id}`}>{post.title}</Link></h2>
+              <h2 className="text-xl font-semibold mb-2"><Link to={`/post/${post._id}`}>{DOMPurify.sanitize(post.title)}</Link></h2>
               <p className="text-gray-500 mb-2">
-                By {post.author?.name || 'Unknown'}
+                By {DOMPurify.sanitize(post.author?.name || 'Unknown')}
               </p>
               <p className="text-gray-700 mb-4">
-                {post.content.slice(0, 100)}...
+                {DOMPurify.sanitize(post.content.slice(0, 100))}...
               </p>
               <div className="flex gap-2">
                 <button

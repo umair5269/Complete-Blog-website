@@ -3,7 +3,8 @@ import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
- 
+import DOMPurify from 'dompurify';
+
 function MyPostsPage() {
   const { user } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
@@ -11,8 +12,8 @@ function MyPostsPage() {
   const navigate = useNavigate();
   // const isOwner= (post) => post.author._id === user?._id;
 
-  const userRole =user?.role
-  const userId =user?.id
+  const userRole = user?.role
+  const userId = user?.id
 
   useEffect(() => {
     const fetchMyPosts = async () => {
@@ -87,12 +88,14 @@ function MyPostsPage() {
 
                     <Link to={`/post/${post._id}`} className="text-blue-600 hover:underline">
 
-                      <h3 className="text-xl font-semibold text-blue-600 mb-2">{post.title}</h3>
+                      <h3 className="text-xl font-semibold text-blue-600 mb-2">{DOMPurify.sanitize(post.title)}</h3>
                     </Link>
                     <p className="text-gray-700 text-sm mb-3">
-                      {post.content.length > 100
-                        ? post.content.substring(0, 100) + '...'
-                        : post.content}
+                      {DOMPurify.sanitize(
+                        post.content.length > 100
+                          ? post.content.substring(0, 100) + '...'
+                          : post.content
+                      )}
                     </p>
                     <p className="text-xs text-gray-500">
                       Status: {post.status} | {new Date(post.createdAt).toLocaleString()}

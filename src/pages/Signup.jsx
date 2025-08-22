@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
+import { AuthContext } from "@/context/AuthContext";
 
 const Signup = () => {
-
+const {setUser} = useContext(AuthContext)
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -32,8 +33,7 @@ const Signup = () => {
       if (!res.ok) {
         setError(data.message || 'Signup failed');
       } else {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('role', data.role);
+        setUser(data)
         navigate('/');
       }
     } catch (err) {

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/Users'); // Adjust the path as necessary
 const router = express.Router();
 const { protect, adminOnly, managerOnly } = require('../middleware/authMiddleware');
-const isProduction ="production";
+const isProduction = process.env.NODE_ENV === "production";
 
 // Signup
 router.post('/signup', async (req, res) => {
@@ -13,6 +13,7 @@ router.post('/signup', async (req, res) => {
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
+        
 
         const user = await User.create({
             name,
@@ -25,12 +26,12 @@ router.post('/signup', async (req, res) => {
         // Set JWT in secure HTTP-only cookie
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: isProduction, 
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000
         });
 
-        // Send user info (but NOT the token)
+        // Send user info 
         res.status(201).json({
             _id: user._id,
             name: user.name,

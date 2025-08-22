@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -119,8 +120,8 @@ export default function AdminUsersPage() {
               {users.map((user) => (
                 <tr key={user._id}>
 
-                  <td className="px-6 py-4">{user.name}</td>
-                  <td className="px-6 py-4">{user.email}</td>
+                  <td className="px-6 py-4">{DOMPurify.sanitize(user.name)}</td>
+                  <td className="px-6 py-4">{DOMPurify.sanitize(user.email)}</td>
                   <td className="px-6 py-4 capitalize">
                     <select
                       value={user.role}

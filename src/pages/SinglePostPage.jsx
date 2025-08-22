@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '@/context/AuthContext';
+import DOMPurify from 'dompurify';
 
 function SinglePostPage() {
    const { user } = useContext(AuthContext);
@@ -105,9 +106,9 @@ function SinglePostPage() {
         <div className="rounded-xl shadow-lg overflow-hidden bg-white">
           {/* header */}
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
-            <h1 className="text-3xl md:text-4xl font-extrabold">{post.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-extrabold">{DOMPurify.sanitize(post.title)}</h1>
             <p className="mt-2 text-sm opacity-95">
-              By <span className="font-semibold">{post.author?.name || 'Unknown'}</span> •{' '}
+              By <span className="font-semibold">{DOMPurify.sanitize(post.author?.name || 'Unknown')}</span> •{' '}
               {new Date(post.createdAt).toLocaleString()}
             </p>
           </div>
@@ -115,7 +116,7 @@ function SinglePostPage() {
           {/* content */}
           <div className="p-8">
             <div className="prose prose-lg max-w-none text-gray-800">
-              {post.content}
+              {DOMPurify.sanitize(post.content)}
             </div>
 
             <div className="mt-6 flex items-center gap-3">

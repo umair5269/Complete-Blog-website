@@ -5,7 +5,7 @@ import { AuthContext } from '@/context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading, setUser } = useContext(AuthContext);
   const isLoggedIn = !!user;
 
 
@@ -19,6 +19,7 @@ const Navbar = () => {
         } 
       });
       alert("logged out successfully");
+      setUser(null);
       navigate("/login");
       
     } catch (err) {

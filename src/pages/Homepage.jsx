@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -72,15 +73,17 @@ function HomePage() {
                     className="bg-white rounded-lg shadow hover:shadow-lg transition p-5"
                   >
                     <h3 className="text-lg font-semibold text-blue-600 mb-2">
-                      <Link to={`/post/${post._id}`}>{post.title}</Link>
+                      <Link to={`/post/${post._id}`}>{DOMPurify.sanitize(post.title)}</Link>
                     </h3>
                     <p className="text-sm text-gray-500 mb-3">
-                      By: {post.author?.name || 'Unknown'}
+                      By: {DOMPurify.sanitize(post.author?.name || 'Unknown')}
                     </p>
                     <p className="text-gray-700 text-sm">
-                      {post.content.length > 100
-                        ? post.content.substring(0, 100) + '...'
-                        : post.content}
+                      {DOMPurify.sanitize(
+                        post.content.length > 100
+                          ? post.content.substring(0, 100) + '...'
+                          : post.content
+                      )}
                     </p>
                   </div>
                 ))}
@@ -98,15 +101,17 @@ function HomePage() {
                       className="bg-white rounded-lg shadow hover:shadow-lg transition p-5"
                     >
                       <h3 className="text-lg font-semibold text-blue-600 mb-2">
-                        <Link to={`/post/${post._id}`}>{post.title}</Link>
+                        <Link to={`/post/${post._id}`}>{DOMPurify.sanitize(post.title)}</Link>
                       </h3>
                       <p className="text-sm text-gray-500 mb-3">
-                        By: {post.author?.name || 'Unknown'}
+                        By: {DOMPurify.sanitize(post.author?.name || 'Unknown')}
                       </p>
                       <p className="text-gray-700 text-sm">
-                        {post.content.length > 80
-                          ? post.content.substring(0, 80) + '...'
-                          : post.content}
+                        {DOMPurify.sanitize(
+                          post.content.length > 100
+                            ? post.content.substring(0, 100) + '...'
+                            : post.content
+                        )}
                       </p>
                     </div>
                   ))}
