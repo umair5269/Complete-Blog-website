@@ -7,6 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, loading, setUser } = useContext(AuthContext);
   const isLoggedIn = !!user;
+  // console.log("User in navbar:", user);
 
 
   const handleLogout = async () => {

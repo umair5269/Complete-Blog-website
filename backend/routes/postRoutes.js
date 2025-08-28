@@ -38,14 +38,45 @@ router.get('/my-posts', protect, async (req, res) => {
 // Get all posts
 router.get('/all', async (req, res) => {
   try {
-    const posts = await Post.find()
-      .populate('author', 'name email')
-      .sort({ createdAt: -1 });
+    const { q } = req.query;
+    let pipeline = [
+      {
+        $lookup: {
+          from: "users", // the collection name of your User schema
+          localField: "author",
+          foreignField: "_id",
+          as: "author"
+        }
+      },
+      {
+        $unwind: "$author"
+      },
+      {
+        $sort: { createdAt: -1 }
+      }
+    ];
+
+    if (q) {
+      const regex = new RegExp(q, "i"); // case-insensitive regex
+      pipeline.push({
+        $match: {
+          $or: [
+            { title: { $regex: regex } },
+            { content: { $regex: regex } },
+            { "author.name": { $regex: regex } }
+          ]
+        }
+      });
+    }
+
+    const posts = await Post.aggregate(pipeline);
     res.json(posts);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Get single post
 router.get('/:id', async (req, res) => {
