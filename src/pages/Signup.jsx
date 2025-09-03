@@ -8,6 +8,7 @@ const {setUser} = useContext(AuthContext)
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
 
   const handleChange = (e) => {
@@ -19,7 +20,7 @@ const {setUser} = useContext(AuthContext)
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/signup', {
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: 'POST',
         credentials: "include",
         headers: {

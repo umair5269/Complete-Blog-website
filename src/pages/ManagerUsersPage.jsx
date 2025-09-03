@@ -9,11 +9,12 @@ export default function ManagerUsersPage() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/manager/users', {
+        const res = await fetch(`${API_URL}/api/manager/users`, {
           method: "GET",
           credentials: "include",
         });

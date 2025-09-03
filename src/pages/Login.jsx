@@ -9,6 +9,7 @@ const Login = () => {
   const [form, setForm] = useState({ password: '', email: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
 
   const handleChange = (e) => {
@@ -20,7 +21,7 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         credentials: "include",
         headers: {

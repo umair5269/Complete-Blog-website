@@ -13,12 +13,13 @@ export default function EditPostPage() {
   const [content, setContent] = useState('');
   const [status, setStatus] = useState('draft');
   const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Load the current post data
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+        const res = await fetch(`${API_URL}/api/posts/${id}`, {
           method: 'GET',
           credentials: 'include',
         });

@@ -11,6 +11,7 @@ function MyPostsPage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   // const isOwner= (post) => post.author._id === user?._id;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const userRole = user?.role
   const userId = user?.id
@@ -18,7 +19,7 @@ function MyPostsPage() {
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/posts/my-posts', {
+        const res = await fetch(`${API_URL}/api/posts/my-posts`, {
           method: "GET",
           credentials: "include",
           headers: {

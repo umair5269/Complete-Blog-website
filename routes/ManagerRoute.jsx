@@ -6,12 +6,13 @@ export default function ManagerRoute({ children }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isManager, setIsManager] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
  
   useEffect(() => {
     const checkManager = async () => {
 
       try {
-        const res = await fetch('http://localhost:5000/api/auth/manager-data', {
+        const res = await fetch(`${API_URL}/api/auth/manager-data`, {
           method: 'GET',
           credentials: "include",
         });

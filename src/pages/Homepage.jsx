@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { useSearchParams } from "react-router-dom";
 
+
 function HomePage() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -12,6 +13,7 @@ function HomePage() {
   const [search, setSearch] = useState(searchParams.get("q") || "");
   const [deBouncedSearch, setDeBouncedSearch] = useState("");
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const featuredPosts = posts.slice(0, 3);
   const otherPosts = posts.slice(3);
@@ -41,7 +43,7 @@ function HomePage() {
     const fetchAllPosts = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/posts/all?q=${deBouncedSearch}`,
+          `${API_URL}/api/posts/all?q=${deBouncedSearch}`,
           { signal: controller.signal }
         );
         if (res.ok) {

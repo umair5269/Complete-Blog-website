@@ -7,11 +7,12 @@ const ManagerPostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/manager/posts', {
+        const res = await fetch(`${API_URL}/api/manager/posts`, {
           method: 'GET',
           credentials: "include",
         });

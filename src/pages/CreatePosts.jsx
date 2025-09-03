@@ -9,6 +9,7 @@ function CreatePostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState('draft'); // draft or published
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +27,7 @@ function CreatePostPage() {
 
     try {
       // Example: send to API (adjust URL as needed)
-      const res = await fetch('http://localhost:5000/api/posts/create', {
+      const res = await fetch(`${API_URL}/api/posts/create`, {
         method: 'POST',
         credentials: 'include',
         headers: {

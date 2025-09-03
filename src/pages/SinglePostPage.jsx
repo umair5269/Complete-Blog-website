@@ -10,13 +10,14 @@ function SinglePostPage() {
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // fetch the post
   useEffect(() => {
     const fetchPost = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${id}`);
+        const res = await fetch(`${API_URL}/api/posts/${id}`);
         if (!res.ok) {
           console.error('Failed to fetch post', res.status);
           setPost(null);

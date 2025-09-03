@@ -7,11 +7,12 @@ const AdminPostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/admin/posts', {
+        const res = await fetch(`${API_URL}/api/admin/posts`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -28,7 +29,7 @@ const AdminPostsPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/posts/${id}`, {
+      const res = await fetch(`${API_URL}/api/admin/posts/${id}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {

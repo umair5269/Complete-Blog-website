@@ -8,11 +8,12 @@ const Navbar = () => {
   const { user, loading, setUser } = useContext(AuthContext);
   const isLoggedIn = !!user;
   // console.log("User in navbar:", user);
+   const API_URL = import.meta.env.VITE_API_URL;
 
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch(`${API_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
         headers:{

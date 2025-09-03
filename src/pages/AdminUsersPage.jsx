@@ -8,11 +8,12 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/admin/users', {
+        const res = await fetch(`${API_URL}/api/admin/users`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -35,7 +36,7 @@ export default function AdminUsersPage() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, {
+      const res = await fetch(`${API_URL}/api/admin/users/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -61,7 +62,7 @@ export default function AdminUsersPage() {
     if (!window.confirm(`Change role to "${newRole}"?`)) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${id}/role`, {
+      const res = await fetch(`${API_URL}/api/admin/users/${id}/role`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {

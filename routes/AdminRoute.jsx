@@ -6,12 +6,14 @@ export default function AdminRoute({ children }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
+  
 
   useEffect(() => {
     const checkAdmin = async () => {
 
       try {
-        const res = await fetch('http://localhost:5000/api/auth/admin-data', {
+        const res = await fetch(`${API_URL}/api/auth/admin-data`, {
           method: 'GET',
           credentials: 'include',
         });
