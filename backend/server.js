@@ -56,7 +56,10 @@ app.use(hpp());
 
 // middleware
 app.use(cors({
-  origin: "http://localhost:5173", // frontend URL
+  origin: [
+  "http://localhost:5173",
+  "https://complete-blog-website-production.up.railway.app"
+], // frontend URL
   credentials: true,               // allow cookies to be sent
 }));
 app.use(express.json());
