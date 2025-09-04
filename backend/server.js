@@ -58,7 +58,8 @@ app.use(hpp());
 app.use(cors({
   origin: [
   "http://localhost:5173",
-  "https://complete-blog-website-production.up.railway.app"
+  "https://complete-blog-website-production.up.railway.app",
+  "https://complete-blog-website.vercel.app"
 ], // frontend URL
   credentials: true,               // allow cookies to be sent
 }));
