@@ -63,7 +63,6 @@ app.use(hpp());
 //   credentials: true,               // allow cookies to be sent
 // }));
 const allowedOrigins = [
-  "http://localhost:5173",
   "https://complete-blog-website-production.up.railway.app",
   "https://complete-blog-website.vercel.app"
 ];
