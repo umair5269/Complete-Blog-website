@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 
 
@@ -67,7 +68,8 @@ export default function EditPostPage() {
   };
 
   if (loading) {
-    return <p className="text-center text-lg mt-12">Loading post...</p>;
+    // return <p className="text-center text-lg mt-12">Loading post...</p>;
+    return <LoadingPage />;
   }
 
   return (

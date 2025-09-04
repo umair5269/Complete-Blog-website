@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '@/context/AuthContext';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 function SinglePostPage() {
    const { user } = useContext(AuthContext);
@@ -97,7 +98,8 @@ function SinglePostPage() {
     navigate(`/edit-post/${id}`);
   };
 
-  if (loading) return <p className="text-center text-lg mt-12">Loading post...</p>;
+  // if (loading) return <p className="text-center text-lg mt-12">Loading post...</p>;
+  if (loading) return <LoadingPage/>;
   if (!post) return <p className="text-center text-lg mt-12">Post not found</p>;
 
   return (

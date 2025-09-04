@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 function MyPostsPage() {
   const { user } = useContext(AuthContext);
@@ -68,7 +69,8 @@ function MyPostsPage() {
     navigate(`/edit-post/${id}`);
   };
 
-  if (loading) return <p className="text-center mt-8">Loading your posts...</p>;
+  // if (loading) return <p className="text-center mt-8">Loading your posts...</p>;
+  if (loading) return <LoadingPage/>;
 
   return (
     <>

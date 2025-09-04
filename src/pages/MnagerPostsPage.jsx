@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 const ManagerPostsPage = () => {
   const [posts, setPosts] = useState([]);
@@ -26,7 +27,8 @@ const ManagerPostsPage = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <p className="text-center mt-10">Loading posts...</p>;
+  // if (loading) return <p className="text-center mt-10">Loading posts...</p>;
+  if (loading) return <LoadingPage/>;
 
   return (
     <>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 
 export default function ManagerUsersPage() {
@@ -35,7 +36,8 @@ export default function ManagerUsersPage() {
     fetchUsers();
   }, [navigate]);
 
-  if (loading) return <p className="text-center mt-10">Loading users...</p>;
+  // if (loading) return <p className="text-center mt-10">Loading users...</p>;
+  if (loading) return <LoadingPage/>;
 
   return (
     <>

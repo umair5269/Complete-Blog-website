@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
+import LoadingPage from '../components/LoadingPage';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -92,7 +93,8 @@ export default function AdminUsersPage() {
     }
   };
 
-  if (loading) return <p className="text-center mt-10">Loading users...</p>;
+  // if (loading) return <p className="text-center mt-10">Loading users...</p>;
+  if (loading) return <LoadingPage/>;
 
   return (
     <>
