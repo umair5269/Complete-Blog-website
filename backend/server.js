@@ -54,14 +54,33 @@ app.use(hpp());
 
 
 // middleware
-app.use(cors({
-  origin: [
+// app.use(cors({
+//   origin: [
+//   "http://localhost:5173",
+//   "https://complete-blog-website-production.up.railway.app",
+//   "https://complete-blog-website.vercel.app"
+// ], // frontend URL
+//   credentials: true,               // allow cookies to be sent
+// }));
+const allowedOrigins = [
   "http://localhost:5173",
   "https://complete-blog-website-production.up.railway.app",
   "https://complete-blog-website.vercel.app"
-], // frontend URL
-  credentials: true,               // allow cookies to be sent
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS: " + origin));
+    }
+  },
+  credentials: true,
 }));
+
 app.use(express.json());
 
 // routes
