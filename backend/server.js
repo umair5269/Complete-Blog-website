@@ -16,6 +16,8 @@ const hpp = require('hpp');
 
 
 const app = express();
+app.set("trust proxy", 1); // because Railway sits behind a proxy
+
 app.use(cookieParser());
 
 // prevent noSQL injection.. removes $ and . from query
@@ -63,8 +65,9 @@ app.use(hpp());
 //   credentials: true,               // allow cookies to be sent
 // }));
 const allowedOrigins = [
+  "https://complete-blog-website.vercel.app",
   "https://complete-blog-website-production.up.railway.app",
-  "https://complete-blog-website.vercel.app"
+  "http://localhost:5173",
 ];
 
 app.use(cors({
