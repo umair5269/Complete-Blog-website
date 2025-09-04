@@ -1,4 +1,5 @@
 
+import LoadingPage from '@/src/components/LoadingPage';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,7 +46,7 @@ export default function ManagerRoute({ children }) {
   }, [navigate]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <LoadingPage/>;
   }
 
   return isManager ? children : navigate('/');
