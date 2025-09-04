@@ -45,7 +45,7 @@ export default function EditPostPage() {
     const cleanTitle = DOMPurify.sanitize(title);
     const cleanContent = DOMPurify.sanitize(content);
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const res = await fetch(`${API_URL}/api/posts/${id}`, {
         method: 'PUT',
         credentials: 'include',
         headers: {

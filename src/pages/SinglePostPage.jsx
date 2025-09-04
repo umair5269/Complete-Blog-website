@@ -50,7 +50,7 @@ function SinglePostPage() {
     if (!user) return null;
     return String(user._id ?? user.id ?? '');
   };
-
+ 
 
   // permissions
   const authorRole = post?.author?.role;
@@ -72,7 +72,7 @@ function SinglePostPage() {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const res = await fetch(`${API_URL}/api/posts/${id}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {
