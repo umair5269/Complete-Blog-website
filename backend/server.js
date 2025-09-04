@@ -16,7 +16,6 @@ const hpp = require('hpp');
 
 
 const app = express();
-app.set('trust proxy', 1);
 app.use(cookieParser());
 
 // prevent noSQL injection.. removes $ and . from query
