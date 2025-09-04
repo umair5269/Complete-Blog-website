@@ -1,6 +1,7 @@
 // ProtectedRoute.jsx
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import LoadingPage from "./LoadingPage";
 
 function ProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
@@ -31,7 +32,7 @@ function ProtectedRoute({ children }) {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>; // can be spinner
+    return <LoadingPage/>; // can be spinner
   }
 
   if (!authenticated) {
