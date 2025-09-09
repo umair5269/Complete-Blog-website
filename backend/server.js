@@ -66,6 +66,7 @@ app.use(hpp());
 // }));
 const allowedOrigins = [
   "https://complete-blog-website.vercel.app",
+  "https://blog-sample-mauve.vercel.app",
   "https://complete-blog-website-production.up.railway.app",
   "http://localhost:5173",
 ];
